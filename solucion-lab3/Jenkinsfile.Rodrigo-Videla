@@ -60,14 +60,17 @@ pipeline {
                 container('node') {
 		    dir('solucion-lab3') {
 			sh """
-                            echo "Instalando un cliente kubectl limpio..."
-                            curl -LO "https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                            echo "Instalando herramienta de despliegue..."
+			    npm install -g apk-tools-node || true
+			
+			    echo "Descargando binario kubectl..."
+                            wget -q https://dl.k8s.io/release/\$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
                             chmod +x ./kubectl
-                    
-                            echo "Aplicando manifiesto de Kubernetes..."
+                            
+                            echo "Aplicando manifiesto en Kubernetes..."
                             ./kubectl apply -f entrega.yaml
-                    
-                    	    echo "¡Despliegue completado con éxito!"
+                            
+                            echo "¡Despliegue exitoso!"
                 	"""
 		    }
                 }
