@@ -1,0 +1,483 @@
+Started by user Jenkins Admin
+Obtained solucion-lab3/Jenkinsfile.Rodrigo-Videla from git https://github.com/rodrigovidela/laboratorio3-kubernetes.git
+[Pipeline] Start of Pipeline
+[Pipeline] readTrusted
+Obtained solucion-lab3/agent.yaml from git https://github.com/rodrigovidela/laboratorio3-kubernetes.git
+[Pipeline] podTemplate
+[Pipeline] {
+[Pipeline] node
+Created Pod: kubernetes jenkins/pipeline-rodrigo-videla-15-cgbrt-81908-d55gw
+[PodInfo] jenkins/pipeline-rodrigo-videla-15-cgbrt-81908-d55gw
+	Container [docker] waiting [ContainerCreating] No message
+	Container [jnlp] waiting [ContainerCreating] No message
+	Container [kubectl] waiting [ContainerCreating] No message
+	Container [node] waiting [ContainerCreating] No message
+	Pod [Pending][ContainersNotReady] containers with unready status: [node docker kubectl jnlp]
+Agent pipeline-rodrigo-videla-15-cgbrt-81908-d55gw is provisioned from template pipeline-rodrigo-videla_15-cgbrt-81908
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  annotations:
+    kubernetes.jenkins.io/last-refresh: "1780605523873"
+    buildUrl: "http://jenkins.jenkins.svc.cluster.local:8080/job/pipeline-rodrigo-videla/15/"
+    runUrl: "job/pipeline-rodrigo-videla/15/"
+  labels:
+    component: "jenkins-agent"
+    jenkins/jenkins-jenkins-agent: "true"
+    jenkins/label-digest: "9d9597802aef427e64d1b6d4f6ce1b4e28ba113d"
+    jenkins/label: "pipeline-rodrigo-videla_15-cgbrt"
+    kubernetes.jenkins.io/controller: "http___jenkins_jenkins_svc_cluster_local_8080x"
+  name: "pipeline-rodrigo-videla-15-cgbrt-81908-d55gw"
+  namespace: "jenkins"
+spec:
+  containers:
+  - command:
+    - "cat"
+    image: "node:22-alpine"
+    name: "node"
+    tty: true
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  - command:
+    - "cat"
+    image: "docker:24-cli"
+    name: "docker"
+    tty: true
+    volumeMounts:
+    - mountPath: "/var/run/docker.sock"
+      name: "docker-sock"
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  - command:
+    - "cat"
+    image: "bitnami/kubectl:latest"
+    name: "kubectl"
+    tty: true
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  - env:
+    - name: "JENKINS_SECRET"
+      value: "********"
+    - name: "JENKINS_TUNNEL"
+      value: "jenkins-agent.jenkins.svc.cluster.local:50000"
+    - name: "JENKINS_AGENT_NAME"
+      value: "pipeline-rodrigo-videla-15-cgbrt-81908-d55gw"
+    - name: "REMOTING_OPTS"
+      value: "-noReconnectAfter 1d"
+    - name: "JENKINS_NAME"
+      value: "pipeline-rodrigo-videla-15-cgbrt-81908-d55gw"
+    - name: "JENKINS_AGENT_WORKDIR"
+      value: "/home/jenkins/agent"
+    - name: "JENKINS_URL"
+      value: "http://jenkins.jenkins.svc.cluster.local:8080/"
+    image: "jenkins/inbound-agent:3355.v388858a_47b_33-3-jdk21"
+    name: "jnlp"
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+    volumeMounts:
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  nodeSelector:
+    kubernetes.io/os: "linux"
+  restartPolicy: "Never"
+  volumes:
+  - hostPath:
+      path: "/var/run/docker.sock"
+    name: "docker-sock"
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+
+Running on pipeline-rodrigo-videla-15-cgbrt-81908-d55gw in /home/jenkins/agent/workspace/pipeline-rodrigo-videla
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://github.com/rodrigovidela/laboratorio3-kubernetes.git
+ > git init /home/jenkins/agent/workspace/pipeline-rodrigo-videla # timeout=10
+Fetching upstream changes from https://github.com/rodrigovidela/laboratorio3-kubernetes.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/rodrigovidela/laboratorio3-kubernetes.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+Checking out Revision 441362c7f08ea860498d6a0ee3bd70d24ca3b78f (refs/remotes/origin/main)
+ > git config remote.origin.url https://github.com/rodrigovidela/laboratorio3-kubernetes.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 441362c7f08ea860498d6a0ee3bd70d24ca3b78f # timeout=10
+Commit message: "fix: usando wget para el binario de kubectl"
+ > git rev-list --no-walk 441362c7f08ea860498d6a0ee3bd70d24ca3b78f # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Install)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] dir
+Running in /home/jenkins/agent/workspace/pipeline-rodrigo-videla/lab3
+[Pipeline] {
+[Pipeline] sh
++ npm install -g pnpm
+
+added 1 package in 1s
+
+1 package is looking for funding
+  run `npm fund` for details
+[Pipeline] sh
++ pnpm install --frozen-lockfile
+? Verifying lockfile against supply-chain policies (670 entries)...
+✓ Lockfile passes supply-chain policies (670 entries in 7.4s)
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +643
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 643, reused 0, downloaded 231, added 231
+Progress: resolved 643, reused 0, downloaded 359, added 359
+Progress: resolved 643, reused 0, downloaded 507, added 507
+Progress: resolved 643, reused 0, downloaded 640, added 640
+Progress: resolved 643, reused 0, downloaded 643, added 643, done
+
+dependencies:
++ @nestjs/common 11.1.24
++ @nestjs/core 11.1.24
++ @nestjs/platform-express 11.1.24
++ reflect-metadata 0.2.2
++ rxjs 7.8.2
+
+devDependencies:
++ @eslint/eslintrc 3.3.5
++ @eslint/js 9.39.4
++ @nestjs/cli 11.0.21
++ @nestjs/schematics 11.1.0
++ @nestjs/testing 11.1.24
++ @types/express 5.0.6
++ @types/jest 30.0.0
++ @types/node 24.12.4
++ @types/supertest 7.2.0
++ eslint 9.39.4
++ eslint-config-prettier 10.1.8
++ eslint-plugin-prettier 5.5.6
++ globals 17.6.0
++ jest 30.4.2
++ prettier 3.8.3
++ source-map-support 0.5.21
++ supertest 7.2.2
++ ts-jest 29.4.11
++ ts-loader 9.6.0
++ ts-node 10.9.2
++ tsconfig-paths 4.2.0
++ typescript 5.9.3
++ typescript-eslint 8.60.0
+
+Done in 12.6s using pnpm v11.5.1
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] dir
+Running in /home/jenkins/agent/workspace/pipeline-rodrigo-videla/lab3
+[Pipeline] {
+[Pipeline] sh
++ pnpm test
+$ jest
+PASS src/env-config.spec.ts
+PASS src/app.controller.spec.ts
+
+Test Suites: 2 passed, 2 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        0.604 s
+Ran all test suites.
+[Pipeline] sh
++ pnpm test:e2e
+$ jest --config ./test/jest-e2e.json
+PASS test/app.e2e-spec.ts
+  AppController (e2e)
+    ✓ / (GET) (55 ms)
+    ✓ /lab (GET) (9 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        0.458 s
+Ran all test suites.
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] dir
+Running in /home/jenkins/agent/workspace/pipeline-rodrigo-videla/solucion-lab3
+[Pipeline] {
+[Pipeline] sh
++ docker build -f Dockerfile -t rvidela/tarea-final:rodrigo-videla ../lab3
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 977B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [builder 1/8] FROM docker.io/library/node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920
+#4 resolve docker.io/library/node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920 done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 216.52kB done
+#5 DONE 0.0s
+
+#6 [builder 5/8] COPY tsconfig.json nest-cli.json ./
+#6 CACHED
+
+#7 [builder 6/8] COPY src ./src
+#7 CACHED
+
+#8 [builder 2/8] RUN npm install -g pnpm
+#8 CACHED
+
+#9 [builder 7/8] RUN pnpm install --frozen-lockfile
+#9 CACHED
+
+#10 [runner 5/6] RUN pnpm install --prod --frozen-lockfile
+#10 CACHED
+
+#11 [builder 3/8] WORKDIR /app
+#11 CACHED
+
+#12 [builder 8/8] RUN pnpm build
+#12 CACHED
+
+#13 [builder 4/8] COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+#13 CACHED
+
+#14 [runner 6/6] COPY --from=builder /app/dist ./dist
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:441b05e11e3c33f6aa12b9d51e72aea36703bac718415ba9abf8645590e71f38 done
+#15 exporting config sha256:fa03715ebd08bd8be921e62a59c15e0ab9bc8079ea129d7f485045040ec71b7a done
+#15 exporting attestation manifest sha256:ff2b424c93ceccb01b401399ffc444cdda5e91b1da87bfbb03b863e2bb7fb315 0.0s done
+#15 exporting manifest list sha256:263b8df817d5bfbf94c4802b5fd0b4aa8d6b217e36af608d3673def28369da07 done
+#15 naming to docker.io/rvidela/tarea-final:rodrigo-videla done
+#15 unpacking to docker.io/rvidela/tarea-final:rodrigo-videla done
+#15 DONE 0.0s
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKER_PASS
+[Pipeline] {
+[Pipeline] sh
++ echo ****
++ docker login -u rvidela --password-stdin
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[Pipeline] sh
++ docker push rvidela/tarea-final:rodrigo-videla
+The push refers to repository [docker.io/rvidela/tarea-final]
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+851a7afa69f7: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+851a7afa69f7: Waiting
+851a7afa69f7: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+851a7afa69f7: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+851a7afa69f7: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+851a7afa69f7: Waiting
+851a7afa69f7: Layer already exists
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+634ef0557e4c: Layer already exists
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+14b880d35ed2: Waiting
+fb91a13b2dbf: Waiting
+69acbe2257cb: Waiting
+2ee8f70e756e: Waiting
+beb899055983: Waiting
+6b13dbc8524a: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+69acbe2257cb: Layer already exists
+2ee8f70e756e: Waiting
+beb899055983: Layer already exists
+6b13dbc8524a: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Waiting
+2d608f48b26f: Waiting
+fb91a13b2dbf: Waiting
+14b880d35ed2: Waiting
+d17f077ada11: Layer already exists
+2d608f48b26f: Layer already exists
+fb91a13b2dbf: Layer already exists
+2ee8f70e756e: Layer already exists
+6b13dbc8524a: Layer already exists
+14b880d35ed2: Waiting
+14b880d35ed2: Pushed
+rodrigo-videla: digest: sha256:263b8df817d5bfbf94c4802b5fd0b4aa8d6b217e36af608d3673def28369da07 size: 856
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy)
+[Pipeline] container
+[Pipeline] {
+[Pipeline] dir
+Running in /home/jenkins/agent/workspace/pipeline-rodrigo-videla/solucion-lab3
+[Pipeline] {
+[Pipeline] sh
++ echo 'Instalando herramienta de despliegue...'
+Instalando herramienta de despliegue...
++ npm install -g apk-tools-node
+npm error code E404
+npm error 404 Not Found - GET https://registry.npmjs.org/apk-tools-node - Not found
+npm error 404
+npm error 404  'apk-tools-node@*' is not in this registry.
+npm error 404
+npm error 404 Note that you can also install from a
+npm error 404 tarball, folder, http url, or git url.
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-04T20_39_18_954Z-debug-0.log
++ true
++ echo 'Descargando binario kubectl...'
+Descargando binario kubectl...
++ wget -qO- https://dl.k8s.io/release/stable.txt
++ wget -q https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl
++ chmod +x ./kubectl
++ echo 'Aplicando manifiesto en Kubernetes...'
+Aplicando manifiesto en Kubernetes...
++ ./kubectl apply -f entrega.yaml
+namespace/ns-rodrigo-videla unchanged
+configmap/config-rodrigo-videla unchanged
+secret/secret-rodrigo-videla unchanged
+deployment.apps/app-rodrigo-videla unchanged
+service/svc-rodrigo-videla unchanged
++ echo '¡Despliegue exitoso!'
+¡Despliegue exitoso!
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // container
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] // podTemplate
+[Pipeline] End of Pipeline
+Finished: SUCCESS
