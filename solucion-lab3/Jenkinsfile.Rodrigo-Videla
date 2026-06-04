@@ -6,7 +6,7 @@ pipeline {
     }
     
     environment {
-        REGISTRY_USER = 'rvidela' 
+        REGISTRY_USER = 'rodrigovidela' 
         IMAGE_NAME    = 'tarea-final'
         IMAGE_TAG     = 'rodrigo-videla'
     }
