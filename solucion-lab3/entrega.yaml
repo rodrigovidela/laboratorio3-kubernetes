@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-rodrigo-videla
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-rodrigo-videla
+  namespace: ns-rodrigo-videla
+data:
+  AMBIENTE: "produccion-laboratorio"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-rodrigo-videla
+  namespace: ns-rodrigo-videla
+type: Opaque
+data:
+  # 'mi-super-clave-secreta' convertido a Base64 es: bWktc3VwZXItY2xhdmUtc2VjcmV0YQ==
+  API_KEY: bWktc3VwZXItY2xhdmUtc2VjcmV0YQ==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-rodrigo-videla
+  namespace: ns-rodrigo-videla
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-rodrigo-videla
+  template:
+    metadata:
+      labels:
+        app: app-rodrigo-videla
+    spec:
+      containers:
+      - name: nestjs-app
+        image: rvidela/tarea-final:rodrigo-videla
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: AMBIENTE
+          valueFrom:
+            configMapKeyRef:
+              name: config-rodrigo-videla
+              key: AMBIENTE
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: secret-rodrigo-videla
+              key: API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-rodrigo-videla
+  namespace: ns-rodrigo-videla
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: app-rodrigo-videla

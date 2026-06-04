@@ -1,0 +1,62 @@
+pipeline {
+    agent {
+        kubernetes {
+            yamlFile 'agent.yaml'
+        }
+    }
+    
+    environment {
+        REGISTRY_USER = 'rvidela' 
+        IMAGE_NAME    = 'tarea-final'
+        IMAGE_TAG     = 'rodrigo-videla'
+    }
+
+    stages {
+        stage('Install') {
+            steps {
+                container('node') {
+                    sh 'npm install -g pnpm'
+                    sh 'pnpm install --frozen-lockfile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                container('node') {
+                    sh 'pnpm test'
+                    sh 'pnpm test:e2e'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                container('docker') {
+                    sh "docker build -t ${REGISTRY_USER}/${IMAGE_NAME}:${IMAGE_TAG} ."
+                }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                container('docker') {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
+                        sh "docker push ${REGISTRY_USER}/${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                container('kubectl') {
+                    sh "kubectl apply -f entrega.yaml"
+                    sh "kubectl rollout restart deployment/app-rodrigo-videla -n ns-rodrigo-videla"
+                    sh "kubectl rollout status deployment/app-rodrigo-videla -n ns-rodrigo-videla"
+                }
+            }
+        }
+    }
+}
