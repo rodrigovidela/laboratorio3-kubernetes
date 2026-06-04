@@ -57,11 +57,18 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                container('kubectl') {
+                container('node') {
 		    dir('solucion-lab3') {
-		        sh "kubectl apply -f entrega.yaml"
-                        sh "kubectl rollout restart deployment/app-rodrigo-videla -n ns-rodrigo-videla"
-                        sh "kubectl rollout status deployment/app-rodrigo-videla -n ns-rodrigo-videla"
+			sh """
+                            echo "Instalando un cliente kubectl limpio..."
+                            curl -LO "https://dl.k8s.io/release/\$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                            chmod +x ./kubectl
+                    
+                            echo "Aplicando manifiesto de Kubernetes..."
+                            ./kubectl apply -f entrega.yaml
+                    
+                    	    echo "¡Despliegue completado con éxito!"
+                	"""
 		    }
                 }
             }
